@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FastAPI WebSocket Test</title>
+</head>
+<body>
+    <h2>WebSocket Test</h2>
+    <p id="status">Connecting...</p>
+
+    <input id="message" placeholder="Enter a message">
+    <button onclick="sendMessage()">Send</button>
+
+    <ul id="messages"></ul>
+
+    <script>
+        const ws = new WebSocket("ws://127.0.0.1:8000/test/socket");
+
+        ws.onopen = () => {
+            document.getElementById("status").textContent =
+                "Connected";
+        };
+
+        ws.onmessage = (event) => {
+            const li = document.createElement("li");
+            li.textContent = event.data;
+            document.getElementById("messages").appendChild(li);
+        };
+
+        ws.onerror = (event) => {
+            console.error("WebSocket error:", event);
+        };
+
+        ws.onclose = () => {
+            document.getElementById("status").textContent =
+                "Disconnected";
+        };
+
+        function sendMessage() {
+            const input = document.getElementById("message");
+
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(input.value);
+                input.value = "";
+            }
+        }
+    </script>
+</body>
+</html>
