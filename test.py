@@ -52,40 +52,128 @@
 #     return s
 # print(reverse_str("python"))
 
-from email import message
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+# from email import message
+# from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
-app = FastAPI()
+# app = FastAPI()
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: set[WebSocket] = set()
+# class ConnectionManager:
+#     def __init__(self):
+#         self.active_connections: set[WebSocket] = set()
         
-    async def connect(self, websocket:WebSocket):
-        await websocket.accept()
-        self.active_connections.add(websocket)
-        print(f"connected users: {len(self.active_connections)}")
+#     async def connect(self, websocket:WebSocket):
+#         await websocket.accept()
+#         self.active_connections.add(websocket)
+#         print(f"connected users: {len(self.active_connections)}")
         
-    async def disconnect(self, websocket:WebSocket):
-        self.active_connections.discard(websocket)
-        print(f"connected users: {len(self.active_connections)}")
+#     async def disconnect(self, websocket:WebSocket):
+#         self.active_connections.discard(websocket)
+#         print(f"connected users: {len(self.active_connections)}")
         
-    async def brodcast(self, message:str):
-        for connection in list(self.active_connections):
-            await connection.send_text(message)
+#     async def brodcast(self, message:str):
+#         for connection in list(self.active_connections):
+#             await connection.send_text(message)
             
-manager = ConnectionManager()
+# manager = ConnectionManager()
 
-@app.websocket('/test/socket')
-async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
-    try:
-        while True:
-            message = await websocket.receive_text()
+# @app.websocket('/test/socket')
+# async def websocket_endpoint(websocket: WebSocket):
+#     await manager.connect(websocket)
+#     try:
+#         while True:
+#             message = await websocket.receive_text()
             
-            await websocket.send_text(message)
+#             await websocket.send_text(message)
             
-    except WebSocketDisconnect:
-        await manager.disconnect(websocket)  
+#     except WebSocketDisconnect:
+#         await manager.disconnect(websocket)  
          
         
+        
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+        
+# a = ListNode(1)
+# b = ListNode(2)
+# a.next = b 
+# c = ListNode(6)
+# b.next = c
+# d = ListNode(3)
+# c.next = d
+# e = ListNode(4)
+# d.next = e
+# f = ListNode(5)
+# e.next = f
+# g = ListNode(6)
+# f.next = g
+# head = a 
+# def removeElements(head: ListNode | None, val: int) -> ListNode | None:
+#     ll = ListNode()
+#     res = ll
+#     while head:
+#         if head.val == val:
+#             head = head.next
+#         else:
+#             ll.next = head
+#             head = head.next
+#             ll = ll.next
+#     ll.next = None
+#     return res.next
+
+# data = removeElements(head, 6)
+
+# while data:
+#     print(data.val)
+#     data = data.next
+
+
+def addBinary(a: str, b: str) -> str:
+    k, j = len(a)-1, len(b)-1
+    print(f"i,j>{k,j}")
+    res = ''
+    rem = 0 
+    end = k if k < j else j
+    print(f"end>{end}")
+    for i in range(end, -1, -1):
+        if a[k]=='0' and b[j]=='0':
+            res = str(1) + res if rem else str(0)+res
+            rem = 0
+        elif a[k]=='1' and b[j]=='1':
+            rem = 1
+            res = str(0)+res
+        else:
+            res = str(1)+res if rem else str(0)+res
+            rem=0
+        k -= 1
+        j -= 1
+    while k > -1:
+        if a[k] == '1':
+            if rem:
+                res = str(0) + res
+                rem = 1
+            else:
+                res = str(1) + res
+        else:
+            res = str(1)+res
+            rem = 0
+        k -= 1
+    while j > -1:
+        if b[j] == '1':
+            if rem:
+                res = str(0) + res
+                rem = 1
+            else:
+                res = str(1) + res
+        else:
+            res = str(1)+res
+            rem = 0
+        # res = a[i] + res
+        j -= 1
+
+    if rem:
+        res = str(1)+res
+    return res
+print(addBinary('100','110010'))
+            
